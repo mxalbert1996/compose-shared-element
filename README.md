@@ -8,18 +8,18 @@ Transition consists of following animations:
 - Crossfade (which makes it work on any kind of element, e.g. `Text`)
 <br>
 
-| **UsersListScreen**:<br><img src="screenshots/UsersListScreen.png" alt="UsersListScreen" width="180"/><br><br>**UserDetailScreen**:<br><img src="screenshots/UserDetailsScreen.png" alt="UserDetailScreen" width="180"/> | Slowed down transition animation:<br><img src="screenshots/TransitionAnimation.gif" alt="TransitionAnimation" width="390"/> |
+| **UsersListScreen**:<br><img src="screenshots/UsersListScreen.png" alt="UsersListScreen" width="180"/><br><br>**UserDetailScreen**:<br><img src="screenshots/UserDetailsScreen.png" alt="UserDetailScreen" width="180"/> | Slowed down transition animation:<br><img src="screenshots/TransitionAnimation.gif" alt="TransitionAnimation" width="320"/> |
 | --- | --- |
 
 
 # Usage
-1. Define `FROM` and `TO` elements with shared tag
+1. Define elements with the same key and different screen keys
 ```kotlin
 @Composable
 fun ScreenA() {
   // ...
   
-    SharedElement(tag = "tag", type = SharedElementType.FROM) {
+    SharedElement(key = "key", screenKey = "A") {
         Image(image, Modifier.preferredSize(48.dp))
     }
   
@@ -30,7 +30,7 @@ fun ScreenA() {
 fun ScreenB() {
   // ...
   
-    SharedElement(tag = "tag", type = SharedElementType.TO) {
+    SharedElement(key = "key", screenKey = "B") {
         Image(image, Modifier.preferredSize(200.dp))
     }
     
