@@ -38,10 +38,11 @@ fun SharedElement(
     rootState.onElementRegistered(elementInfo)
 
     val recompose = invalidate
+    val newPlaceholder = saveAmbientValues(placeholder ?: content)
     val modifier = Modifier.onGloballyPositioned { coordinates ->
         rootState.onElementPositioned(
             elementInfo = elementInfo,
-            placeholder = placeholder ?: content,
+            placeholder = newPlaceholder,
             coordinates = coordinates,
             invalidateElement = recompose
         )
