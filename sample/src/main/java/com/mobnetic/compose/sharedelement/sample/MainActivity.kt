@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ListItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -28,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import com.mobnetic.compose.sharedelement.SharedElement
 import com.mobnetic.compose.sharedelement.SharedElementsRoot
 import com.mobnetic.compose.sharedelement.SharedElementsRootScope
-import java.lang.ref.WeakReference
 
 class MainActivity : AppCompatActivity() {
 
@@ -69,12 +70,13 @@ class MainActivity : AppCompatActivity() {
             MaterialTheme {
                 SharedElementsRoot(durationMillis = TransitionDurationMillis) {
                     scope = this
+                    val listState = rememberLazyListState()
                     Crossfade(
                         selectedUser,
                         animation = tween(durationMillis = TransitionDurationMillis)
                     ) {
                         when (it) {
-                            null -> UsersListScreen()
+                            null -> UsersListScreen(listState)
                             else -> UserDetailsScreen(it)
                         }
                     }
@@ -102,8 +104,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     @Composable
-    private fun UsersListScreen() {
-        LazyColumn {
+    private fun UsersListScreen(listState: LazyListState) {
+        LazyColumn(state = listState) {
             items(users) { user ->
                 ListItem(
                     Modifier.clickable { changeUser(user) },
