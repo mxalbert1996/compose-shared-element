@@ -11,12 +11,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.LayoutCoordinates
-import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import com.mobnetic.compose.sharedelement.SharedElementTransition.InProgress
 import com.mobnetic.compose.sharedelement.SharedElementTransition.WaitingForEndElementPosition
 import com.mobnetic.compose.sharedelement.SharedElementsTracker.State.*
@@ -238,10 +240,13 @@ private class SharedElementsRootState(private val durationMillis: Int) {
         }
     }
 
-    private fun calculateElementBoundsInRoot(elementCoordinates: LayoutCoordinates): Rect {
-        return rootCoordinates?.childBoundingBox(elementCoordinates)
-            ?: elementCoordinates.boundsInRoot
-    }
+    private fun calculateElementBoundsInRoot(elementCoordinates: LayoutCoordinates): Rect =
+        Rect(
+            rootCoordinates?.childToLocal(elementCoordinates, Offset.Zero)
+                ?: elementCoordinates.positionInRoot, elementCoordinates.size.toSize()
+        )
+
+    private fun IntSize.toSize(): Size = Size(width.toFloat(), height.toFloat())
 }
 
 private class SharedElementsTracker(
